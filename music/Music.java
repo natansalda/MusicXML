@@ -278,7 +278,7 @@ public class Music {
 
             protected List<Music.Artist.Album.Song> song;
             @XmlElement(required = true)
-            protected Music.Artist.Album.Description description;
+            private Music.Artist.Album.Description description;
             @XmlAttribute(name = "title")
             protected String title;
 
@@ -323,6 +323,9 @@ public class Music {
                 return description;
             }
 
+            public String descriptionToString() { 
+                return this.description.toString();
+            } 
             /**
              * Sets the value of the description property.
              * 

@@ -15,8 +15,6 @@ import javax.xml.bind.Unmarshaller;
 
 import com.ibm.jzos.ZFile;
 
-import music.ObjectFactory;
-import music.Music;
 import music.Music.Artist;
 import music.Music.Artist.Album;
 import music.Music.Artist.Album.Description;
@@ -68,19 +66,13 @@ public class MusicXml {
 		for (Artist artysta : listaArtystow) {
 			List<Album> listaAlbumow = artysta.getAlbum();
 			for (Album album : listaAlbumow) {
-				String opis = album.getDescription().toString();
-				List<Song> listaPiosenek = album.getSong();
-				System.out.println("Description: " + sep + opis);
-				for (Song piosenka : listaPiosenek) {
-					line = artysta.getName() + sep + album.getTitle() + "\n Description: " + sep + opis + "\n Songs: "
-							+ sep + album.getSong();
+				line = artysta.getName() + sep + album.getTitle();
 
-					if (isWin == false) {
-						outputZ.write(line.getBytes("CP870"));
-						System.out.println(line);
-					} else
-						outputW.println(line);
-				}
+				if (isWin == false) {
+					outputZ.write(line.getBytes("CP870"));
+					System.out.println(line);
+				} else
+					outputW.println(line);
 			}
 		}
 
