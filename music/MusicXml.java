@@ -1,10 +1,6 @@
 package music;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +11,12 @@ import javax.xml.bind.Unmarshaller;
 
 import com.ibm.jzos.ZFile;
 
+import java.io.FileOutputStream;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
 import music.Music.Artist;
 import music.Music.Artist.Album;
 import music.Music.Artist.Album.Description;
@@ -28,7 +30,15 @@ public class MusicXml {
 
         // zbiory windows:
         File inputW = null;
-        PrintWriter outputW = null;
+        PdfWriter outputW = null;
+
+        // pisanie pdf
+        PdfContentByte cb = null;
+        Document pdf = new Document(PageSize.A4);
+        Paragraph paragraf = new Paragraph();
+
+        // Font
+        Font fnt12n;
 
         JAXBContext jaxb = null;
         Unmarshaller unmarsh = null;
@@ -47,54 +57,84 @@ public class MusicXml {
         System.out.println("System: " + os);
         boolean isWin = os.toLowerCase().contains("wind");
 
-        if (isWin == false) {
+        if (!isWin) {
             // z/OS:
             inputZ = new ZFile(args[0], "rt"); // "rt" - readtext
             InputStream inpStream = inputZ.getInputStream();
             InputStreamReader streamRdr = new InputStreamReader(inpStream, "CP870");
-
-            outputZ = new ZFile(args[1], "wb,type=record,noseek");
+            try {
+                outputW = PdfWriter.getInstance(pdf, (new ZFile(args[1], "wb")).getOutputStream());
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
             music = (Music) unmarsh.unmarshal(streamRdr);
+
         } else {
             // Windows:
             inputW = new File(args[0]);
             music = (Music) unmarsh.unmarshal(inputW);
-            outputW = new PrintWriter(args[1]);
+            try {
+                outputW = PdfWriter.getInstance(pdf, new FileOutputStream(args[1]));
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
         }
+
 
         List<Artist> listaArtystow = music.getArtist();
         for (Artist artysta : listaArtystow) {
             List<Album> listaAlbumow = artysta.getAlbum();
             for (Album album : listaAlbumow) {
                 Description opis = album.getDescription();
-
-                line = artysta.getName() + sep + album.getTitle() + sep + opis.getValue();
                 List<Song> listaPiosenek = album.getSong();
                 for (Song piosenka : listaPiosenek) {
-                    line += piosenka.getTitle() + piosenka.getLength();
-                    System.out.println("Output" + sep + piosenka.getTitle() + sep + piosenka.getLength());
-                }
+                    // Elementy do wydruku
+                    String artistName = artysta.getName();
+                    String albumName = album.getTitle();
+                    int numberOfSongs = listaPiosenek.size();
+                    String albumDescription = album.getDescription().getValue();
+                    String songTitle = piosenka.getTitle();
+                    String songDuration = piosenka.getLength();
 
-                if (isWin == false) {
-                    outputZ.write(line.getBytes("CP870"));
-                    System.out.println(line);
-                } else
-                    outputW.println(line);
+                    // Czcionki:
+                    FontFactory.register(args[2], "jakiesFonty");
+                    Font font = FontFactory.getFont("jakiesFonty", BaseFont.CP1250, BaseFont.EMBEDDED);
+                    BaseFont bf = font.getBaseFont();
+                    fnt12n = new Font(bf, 12f, Font.NORMAL, BaseColor.BLACK);
+
+                    // PDF
+                    outputW.setPdfVersion(PdfWriter.VERSION_1_7);
+
+                    pdf.addTitle("Pdf4Omvs PDF");
+                    pdf.addAuthor("Asseco DATA SYSTEMS SA");
+                    pdf.addSubject("Czwarty przyk�ad tworzenia pliku PDF");
+                    pdf.addKeywords("Metadata, Java, iText, PDF");
+                    pdf.addCreator("Program: FourthPdf");
+
+                    pdf.setMargins(60, 60, 50, 40);
+                    pdf.open();
+                    pdf.newPage();
+                    try {
+                        pdf.add(new Paragraph(artistName));
+
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 
-        if (isWin)
-            outputW.close();
-        else
-            outputZ.close();
-
         date = new Date();
-
         Date stopDate = new Timestamp(date.getTime());
         System.out.println("Stop:  " + stopDate);
         long diffInMs = stopDate.getTime() - startDate.getTime();
         float diffInSec = diffInMs / 1000.00f;
         System.out.format("Czas przetwarzenia pliku XML: %.2f s.", diffInSec);
         System.exit(0);
+
+        if (isWin) {
+            outputW.close();
+        } else
+            outputZ.close();
     }
 }
