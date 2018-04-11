@@ -35,6 +35,7 @@ public class MusicXml {
 
 		String line = null, sep = " ";
 		Music music;
+		
 
 		Date date = new Date();
 		Date startDate = new Timestamp(date.getTime());
@@ -62,19 +63,27 @@ public class MusicXml {
 			outputW = new PrintWriter(args[1]);
 		}
 
+
 		List<Artist> listaArtystow = music.getArtist();
 		for (Artist artysta : listaArtystow) {
 			List<Album> listaAlbumow = artysta.getAlbum();
 			for (Album album : listaAlbumow) {
-				line = artysta.getName() + sep + album.getTitle();
-
-				if (isWin == false) {
-					outputZ.write(line.getBytes("CP870"));
-					System.out.println(line);
-				} else
-					outputW.println(line);
+				Description opis = album.getDescription();
+				
+					line = artysta.getName() + sep + album.getTitle() + sep + opis.getValue();
+					List<Song> listaPiosenek = album.getSong();
+					for (Song piosenka : listaPiosenek) {
+						line += piosenka;
+						System.out.println("Output" + sep + piosenka.getTitle());
+					}
+					
+					if (isWin == false) {
+						outputZ.write(line.getBytes("CP870"));
+						System.out.println(line);
+					} else
+						outputW.println(line);
+				}
 			}
-		}
 
 		if (isWin)
 			outputW.close();
@@ -82,6 +91,7 @@ public class MusicXml {
 			outputZ.close();
 
 		date = new Date();
+
 		Date stopDate = new Timestamp(date.getTime());
 		System.out.println("Stop:  " + stopDate);
 		long diffInMs = stopDate.getTime() - startDate.getTime();

@@ -322,10 +322,7 @@ public class Music {
             public Music.Artist.Album.Description getDescription() {
                 return description;
             }
-
-            public String descriptionToString() { 
-                return this.description.toString();
-            } 
+            
             /**
              * Sets the value of the description property.
              * 
