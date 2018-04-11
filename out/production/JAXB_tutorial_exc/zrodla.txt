@@ -1,0 +1,4 @@
+http://th.if.uj.edu.pl/~trom/XML/xml_08.pdf
+
+Generowanie plikow java ze schemy:
+xjc -p hello hello.xsd

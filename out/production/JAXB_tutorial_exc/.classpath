@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="lib" path="C:/Users/natalia.nazaruk/Documents/Received Files/ibmjzos.jar"/>
+	<classpathentry kind="lib" path="C:/Users/natalia.nazaruk/Documents/Received Files/itextpdf-5.3.4.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
