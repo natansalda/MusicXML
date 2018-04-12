@@ -5,9 +5,9 @@ import com.ibm.jzos.ZFile;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -23,11 +23,11 @@ public class MusicXMLNew {
         Date date;
         Font fnt10n;
         PageEvent pageEvent = new PageEvent();
-        boolean split = false;
 
-        PdfPCell cell1 = null, cell2 = null, cell3 = null;
-        PdfPCell cell[] = {cell1, cell2, cell3};
-        float columnWidths[] = {1f, 2f, 3f};
+        JAXBContext jaxb = null;
+        Unmarshaller unmarsh = null;
+
+        Music music;
 
         try {
             date = new Date();

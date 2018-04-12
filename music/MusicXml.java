@@ -97,6 +97,8 @@ public class MusicXml {
                     String songTitle = piosenka.getTitle();
                     String songDuration = piosenka.getLength();
 
+                    line = songTitle + sep + songDuration;
+
                     // Czcionki:
                     FontFactory.register(args[2], "jakiesFonty");
                     Font font = FontFactory.getFont("jakiesFonty", BaseFont.CP1250, BaseFont.EMBEDDED);
@@ -116,7 +118,7 @@ public class MusicXml {
                     pdf.open();
                     pdf.newPage();
                     try {
-                        pdf.add(new Paragraph(paragraf));
+
                         // rozmieszczenie tekstu w akapicie:
                         paragraf.setAlignment(Element.ALIGN_JUSTIFIED);
                         // odleg�o�� mi�dzy akapitami:
@@ -127,6 +129,9 @@ public class MusicXml {
                         paragraf.setFirstLineIndent(30f);
                         // czcionka dla akapitu:
                         paragraf.setFont(fnt12n);
+
+                        pdf.add(new Paragraph(line, fnt12n));
+
 
                     } catch (DocumentException e) {
                         e.printStackTrace();
