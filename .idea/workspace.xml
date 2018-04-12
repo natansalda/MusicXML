@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="22192177-43b0-48fd-80a8-fdb995e876f3" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/music/MusicXMLNew.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/music/MusicXml.class" beforeDir="false" afterPath="$PROJECT_DIR$/music/MusicXml.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/music/MusicXml.java" beforeDir="false" afterPath="$PROJECT_DIR$/music/MusicXml.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAXB_tutorial_exc/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAXB_tutorial_exc/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JAXB_tutorial_exc/music/MusicXml.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JAXB_tutorial_exc/music/MusicXml.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/music/MusicXMLNew.java" beforeDir="false" afterPath="$PROJECT_DIR$/music/MusicXMLNew.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,8 +17,8 @@
       <file leaf-file-name="MusicXml.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/music/MusicXml.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" selection-start-line="27" selection-end-line="27" />
+            <state relative-caret-position="514">
+              <caret line="107" lean-forward="true" selection-start-line="107" selection-end-line="107" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -34,8 +29,8 @@
       <file leaf-file-name="MusicXMLNew.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/music/MusicXMLNew.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1598">
-              <caret line="23" column="27" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="27" />
+            <state relative-caret-position="714">
+              <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -64,6 +59,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/../ZOSFile/src/pl/assecods/pdf/Pdf4Zos.java" />
+        <option value="$PROJECT_DIR$/music/PageEvent.java" />
         <option value="$PROJECT_DIR$/music/MusicXml.java" />
         <option value="$PROJECT_DIR$/music/MusicXMLNew.java" />
       </list>
@@ -139,7 +135,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.MusicXMLNew">
+    <configuration name="MusicXMLNew" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="music.MusicXMLNew" />
+      <module name="JAXB_tutorial_exc" />
+      <option name="PROGRAM_PARAMETERS" value="./music.xml ./music.pdf ./Fonts/FreeSans.ttf" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    </configuration>
     <configuration name="MusicXml" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="music.MusicXml" />
       <module name="JAXB_tutorial_exc" />
@@ -193,6 +195,10 @@
       <properties />
       <listeners />
     </configuration>
+    <list>
+      <item itemvalue="Application.MusicXMLNew" />
+      <item itemvalue="Application.MusicXml" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.MusicXml" />
@@ -214,7 +220,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -325,16 +330,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/music/MusicXml.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../ZOSFile/src/pl/assecods/pdf/Pdf4Zos.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-255">
@@ -352,10 +347,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/music/MusicXml.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="514">
+          <caret line="107" lean-forward="true" selection-start-line="107" selection-end-line="107" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/music/PageEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-34">
+          <caret line="13" column="45" lean-forward="true" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/music/MusicXMLNew.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1598">
-          <caret line="23" column="27" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="27" />
+        <state relative-caret-position="714">
+          <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class MusicXMLNew {
+
     public static void main(String[] args) {
         BufferedReader txtrdr = null;
         PdfWriter wr;
@@ -26,8 +27,8 @@ public class MusicXMLNew {
 
         PdfPTable table = null;
         PdfPCell cell1 = null, cell2 = null, cell3 = null;
-        PdfPCell cell[] = { cell1, cell2, cell3 };
-        float columnWidths[] = { 1f, 2f, 3f };
+        PdfPCell cell[] = {cell1, cell2, cell3};
+        float columnWidths[] = {1f, 2f, 3f};
 
         try {
             date = new Date();
@@ -35,9 +36,9 @@ public class MusicXMLNew {
             System.out.println("Start: " + startDate);
 
             if (args.length < 3) {
-                System.out.println("FirstPdf wymaga trzech argument�w:\n args[0] - nazwa zbioru tekstowego,"
-                        + "\n args[1] - nazwa wyj�ciowego zbioru PDF,\n args[2] - �cie�ka do pliku czcionki."
-                        + "\n args[3] - strona kodowa pliku wej�ciowego (domy�lnie: windows-1250");
+                System.out.println("Wymaga trzech argumentow:\n args[0] - nazwa zbioru tekstowego,"
+                        + "\n args[1] - nazwa wyjsciowego zbioru PDF,\n args[2] - sciezka do pliku czcionki."
+                        + "\n args[3] - strona kodowa pliku wejsciowego (domyslnie: windows-1250");
                 System.exit(20);
             }
             String os = System.getProperty("os.name");
@@ -49,7 +50,7 @@ public class MusicXMLNew {
 
             if (args.length == 4)
                 codePage = args[3];
-            System.out.println("Strona kodowa zbioru wej�ciowego: " + codePage);
+            System.out.println("Strona kodowa zbioru wejsciowego: " + codePage);
 
             // zbi�r tekstowy, kt�ry zostanie przetworzony na PDF:+
             txtrdr = FileFactory.newBufferedReader(args[0], codePage);
