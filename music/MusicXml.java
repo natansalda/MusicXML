@@ -23,6 +23,7 @@ import music.Music.Artist.Album.Description;
 import music.Music.Artist.Album.Song;
 
 public class MusicXml {
+
     public static void main(String[] args) throws JAXBException, IOException {
 
         // zbiory z/OS:
@@ -67,6 +68,7 @@ public class MusicXml {
             } catch (DocumentException e) {
                 e.printStackTrace();
             }
+
             music = (Music) unmarsh.unmarshal(streamRdr);
 
         } else {
@@ -79,7 +81,6 @@ public class MusicXml {
                 e.printStackTrace();
             }
         }
-
 
         List<Artist> listaArtystow = music.getArtist();
         for (Artist artysta : listaArtystow) {
@@ -105,17 +106,27 @@ public class MusicXml {
                     // PDF
                     outputW.setPdfVersion(PdfWriter.VERSION_1_7);
 
-                    pdf.addTitle("Pdf4Omvs PDF");
-                    pdf.addAuthor("Asseco DATA SYSTEMS SA");
-                    pdf.addSubject("Czwarty przyk�ad tworzenia pliku PDF");
+                    pdf.addTitle("Musical collection");
+                    pdf.addAuthor("Natalia Nazaruk");
+                    pdf.addSubject("Cwiczenie tworzenia PDF z XML");
                     pdf.addKeywords("Metadata, Java, iText, PDF");
-                    pdf.addCreator("Program: FourthPdf");
-
+                    pdf.addCreator("Program: MusicXML");
                     pdf.setMargins(60, 60, 50, 40);
+
                     pdf.open();
                     pdf.newPage();
                     try {
-                        pdf.add(new Paragraph(artistName));
+                        pdf.add(new Paragraph(paragraf));
+                        // rozmieszczenie tekstu w akapicie:
+                        paragraf.setAlignment(Element.ALIGN_JUSTIFIED);
+                        // odleg�o�� mi�dzy akapitami:
+                        paragraf.setSpacingAfter(16f);
+                        // odst�p miedzy liniami w akapicie:
+                        paragraf.setLeading(14f);
+                        // wci�cie pierwszej linii akapitu:
+                        paragraf.setFirstLineIndent(30f);
+                        // czcionka dla akapitu:
+                        paragraf.setFont(fnt12n);
 
                     } catch (DocumentException e) {
                         e.printStackTrace();
