@@ -103,35 +103,18 @@ public class MusicXMLNew {
             // czcionka dla akapitu:
             parag.setFont(fnt10n);
 
+
             while (true) {
                 line = xmlrdr.readLine();
                 if (line == null)
                     break;
-                if (line.contains("Lata pracy"))
-                    split = true;
-                if (split == false) {
+                else {
                     parag.add(line);
                     pdf.add(parag);
                     parag.clear();
-                } else {
-                    String words[] = line.split("!");
-                    for (int k = 0; k < 3; k++) {
-                        cell[k] = new PdfPCell(new Paragraph(words[k].trim(), fnt10n));
-                        if (words[0].contains("Lata pracy")) {
-                            // usuni�cie linii z lewej strony kom�rki
-                            cell[k].disableBorderSide(Rectangle.LEFT);
-                            // usuni�cie linii z prawej strony kom�rki
-                            cell[k].disableBorderSide(Rectangle.RIGHT);
-                            // pogrubienie dolnej linii:
-                            cell[k].setBorderWidthBottom(0.75f);
-                        } else
-                            // usuni�cie obramowania kom�rki
-                            cell[k].disableBorderSide(Rectangle.BOX);
-                        table.addCell(cell[k]);
-                    }
                 }
             }
-            pdf.add(table);
+            pdf.add(new Paragraph(line, fnt10n));
         } catch (IOException | DocumentException e) {
             e.printStackTrace();
         } finally {
