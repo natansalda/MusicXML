@@ -25,7 +25,6 @@ public class MusicXMLNew {
         PageEvent pageEvent = new PageEvent();
         boolean split = false;
 
-        PdfPTable table = null;
         PdfPCell cell1 = null, cell2 = null, cell3 = null;
         PdfPCell cell[] = {cell1, cell2, cell3};
         float columnWidths[] = {1f, 2f, 3f};
@@ -86,11 +85,6 @@ public class MusicXMLNew {
             pdf.setMargins(50, 40, 26, 54);
             pdf.open();
             pdf.newPage();
-
-            table = new PdfPTable(3);
-            table.setWidths(columnWidths);
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(10f);
 
             // rozmieszczenie tekstu w akapicie:
             parag.setAlignment(Element.ALIGN_JUSTIFIED);
