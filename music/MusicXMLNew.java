@@ -14,8 +14,8 @@ import java.util.Date;
 public class MusicXMLNew {
 
     public static void main(String[] args) {
-        BufferedReader txtrdr = null;
-        PdfWriter wr;
+        BufferedReader xmlrdr = null;
+        PdfWriter writer;
         Document pdf = new Document(PageSize.A4);
         Paragraph parag = new Paragraph();
 
@@ -44,7 +44,7 @@ public class MusicXMLNew {
             String os = System.getProperty("os.name");
             System.out.println("System: " + os);
 
-            System.out.println("Plik TXT: " + args[0]);
+            System.out.println("Plik XML: " + args[0]);
             System.out.println("Plik PDF: " + args[1]);
             System.out.println("Plik czcionki: " + args[2]);
 
@@ -52,37 +52,36 @@ public class MusicXMLNew {
                 codePage = args[3];
             System.out.println("Strona kodowa zbioru wejsciowego: " + codePage);
 
-            // zbi�r tekstowy, kt�ry zostanie przetworzony na PDF:+
-            txtrdr = FileFactory.newBufferedReader(args[0], codePage);
+            // zbior XML, ktory zostanie przetworzony na PDF:+
+            xmlrdr = FileFactory.newBufferedReader(args[0], codePage);
 
-            // wyj�ciowy PDF:
+            // wyjsciowy PDF:
             if (os.contains("Win"))
-                wr = PdfWriter.getInstance(pdf, new FileOutputStream(args[1]));
+                writer = PdfWriter.getInstance(pdf, new FileOutputStream(args[1]));
             else
-                wr = PdfWriter.getInstance(pdf, (new ZFile(args[1], "wb")).getOutputStream());
+                writer = PdfWriter.getInstance(pdf, (new ZFile(args[1], "wb")).getOutputStream());
 
             // Czcionki:
             FontFactory.register(args[2], "pdfFont");
             Font font = FontFactory.getFont("pdfFont", BaseFont.CP1250, BaseFont.EMBEDDED);
             BaseFont bf = font.getBaseFont();
-
             fnt10n = new Font(bf, 10f, Font.NORMAL, BaseColor.BLACK);
+
             // PDF
-            wr.setPdfVersion(PdfWriter.VERSION_1_7);
-            // wr.setEncryption(USER, OWNER, PdfWriter.ALLOW_PRINTING,
-            // PdfWriter.STANDARD_ENCRYPTION_128);
-            wr.createXmpMetadata();
-            wr.setFullCompression();
-            wr.setPageEvent(pageEvent);
+            writer.setPdfVersion(PdfWriter.VERSION_1_7);
+            writer.createXmpMetadata();
+            writer.setFullCompression();
+            writer.setPageEvent(pageEvent);
+
             pageEvent.setBaseFonts(bf);
-            pageEvent.setTxt("Maurice Ravel");
+            pageEvent.setTxt("Musical collection");
             pageEvent.setShift(25);
 
-            pdf.addTitle("Third PDF");
-            pdf.addAuthor("Asseco DATA SYSTEMS SA");
-            pdf.addSubject("Trzeci przyk�ad tworzenia pliku PDF");
-            pdf.addKeywords("Metadata, Java, iText, PDF");
-            pdf.addCreator("Program: FirstPdf");
+            pdf.addTitle("Musical collection");
+            pdf.addAuthor("Natalia Nazaruk");
+            pdf.addSubject("Cwiczenie z czytania XML do PDF");
+            pdf.addKeywords("Metadata, Java, iText, PDF, XML");
+            pdf.addCreator("Program: MusicXMLNew");
 
             pdf.setMargins(50, 40, 26, 54);
             pdf.open();
@@ -95,17 +94,17 @@ public class MusicXMLNew {
 
             // rozmieszczenie tekstu w akapicie:
             parag.setAlignment(Element.ALIGN_JUSTIFIED);
-            // odleg�o�� mi�dzy akapitami:
+            // odleglosci miedzy akapitami:
             parag.setSpacingAfter(16f);
-            // odst�p miedzy liniami w akapicie:
+            // odstep miedzy liniami w akapicie:
             parag.setLeading(14f);
-            // wci�cie pierwszej linii akapitu:
+            // wciecie pierwszej linii akapitu:
             parag.setFirstLineIndent(30f);
             // czcionka dla akapitu:
             parag.setFont(fnt10n);
 
             while (true) {
-                line = txtrdr.readLine();
+                line = xmlrdr.readLine();
                 if (line == null)
                     break;
                 if (line.contains("Lata pracy"))
@@ -137,7 +136,7 @@ public class MusicXMLNew {
             e.printStackTrace();
         } finally {
             try {
-                txtrdr.close();
+                xmlrdr.close();
                 pdf.close();
             } catch (Exception e) {
                 e.printStackTrace();
