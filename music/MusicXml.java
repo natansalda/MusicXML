@@ -36,7 +36,7 @@ public class MusicXml {
         // pisanie pdf
         PdfContentByte cb = null;
         Document pdf = new Document(PageSize.A4);
-        Paragraph paragraf = new Paragraph();
+        Paragraph paragraf = null;
 
         // Font
         Font fnt12n;
@@ -82,6 +82,26 @@ public class MusicXml {
             }
         }
 
+        // PDF
+        outputW.setPdfVersion(PdfWriter.VERSION_1_7);
+
+        pdf.addTitle("Musical collection");
+        pdf.addAuthor("Natalia Nazaruk");
+        pdf.addSubject("Cwiczenie tworzenia PDF z XML");
+        pdf.addKeywords("Metadata, Java, iText, PDF");
+        pdf.addCreator("Program: MusicXML");
+        pdf.setMargins(60, 60, 50, 40);
+
+
+        // Czcionki:
+        FontFactory.register(args[2], "jakiesFonty");
+        Font font = FontFactory.getFont("jakiesFonty", BaseFont.CP1250, BaseFont.EMBEDDED);
+        BaseFont bf = font.getBaseFont();
+        fnt12n = new Font(bf, 12f, Font.NORMAL, BaseColor.BLACK);
+
+        pdf.open();
+        pdf.newPage();
+
         List<Artist> listaArtystow = music.getArtist();
         for (Artist artysta : listaArtystow) {
             List<Album> listaAlbumow = artysta.getAlbum();
@@ -99,26 +119,8 @@ public class MusicXml {
 
                     line = songTitle + sep + songDuration;
 
-                    // Czcionki:
-                    FontFactory.register(args[2], "jakiesFonty");
-                    Font font = FontFactory.getFont("jakiesFonty", BaseFont.CP1250, BaseFont.EMBEDDED);
-                    BaseFont bf = font.getBaseFont();
-                    fnt12n = new Font(bf, 12f, Font.NORMAL, BaseColor.BLACK);
-
-                    // PDF
-                    outputW.setPdfVersion(PdfWriter.VERSION_1_7);
-
-                    pdf.addTitle("Musical collection");
-                    pdf.addAuthor("Natalia Nazaruk");
-                    pdf.addSubject("Cwiczenie tworzenia PDF z XML");
-                    pdf.addKeywords("Metadata, Java, iText, PDF");
-                    pdf.addCreator("Program: MusicXML");
-                    pdf.setMargins(60, 60, 50, 40);
-
-                    pdf.open();
-                    pdf.newPage();
                     try {
-
+                        paragraf = new Paragraph();
                         // rozmieszczenie tekstu w akapicie:
                         paragraf.setAlignment(Element.ALIGN_JUSTIFIED);
                         // odleg�o�� mi�dzy akapitami:
@@ -130,8 +132,8 @@ public class MusicXml {
                         // czcionka dla akapitu:
                         paragraf.setFont(fnt12n);
 
-                        pdf.add(new Paragraph(line, fnt12n));
-
+                        paragraf.add(albumDescription);
+                        pdf.add(paragraf);
 
                     } catch (DocumentException e) {
                         e.printStackTrace();
@@ -146,11 +148,7 @@ public class MusicXml {
         long diffInMs = stopDate.getTime() - startDate.getTime();
         float diffInSec = diffInMs / 1000.00f;
         System.out.format("Czas przetwarzenia pliku XML: %.2f s.", diffInSec);
-        System.exit(0);
+        pdf.close();
 
-        if (isWin) {
-            outputW.close();
-        } else
-            outputZ.close();
     }
 }

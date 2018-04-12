@@ -21,7 +21,7 @@ public class MusicXMLNew {
         Document pdf = new Document(PageSize.A4);
         Paragraph parag = new Paragraph();
 
-        String line = null, codePage = "CP1250", sep = " ";
+        String line = null, codePage = "CP1250", sep = " ", intro = null;
         Date date;
         Font fnt10n;
         PageEvent pageEvent = new PageEvent();
@@ -93,16 +93,8 @@ public class MusicXMLNew {
             pdf.open();
             pdf.newPage();
 
-            // rozmieszczenie tekstu w akapicie:
-            parag.setAlignment(Element.ALIGN_JUSTIFIED);
-            // odleglosci miedzy akapitami:
-            parag.setSpacingAfter(16f);
-            // odstep miedzy liniami w akapicie:
-            parag.setLeading(14f);
-            // wciecie pierwszej linii akapitu:
-            parag.setFirstLineIndent(30f);
-            // czcionka dla akapitu:
-            parag.setFont(fnt10n);
+            intro = "This is Music Collection \n\n";
+            pdf.add(new Paragraph(intro, fnt10n));
 
             for (Music.Artist artysta : listaArtystow) {
                 List<Music.Artist.Album> listaAlbumow = artysta.getAlbum();
@@ -118,11 +110,12 @@ public class MusicXMLNew {
                         String songTitle = piosenka.getTitle();
                         String songDuration = piosenka.getLength();
 
-                        line = songTitle + sep + songDuration;
+
+                        line = "Artist: " + artistName + ". Album name: " + albumName + sep + "Songs list: " + songTitle + sep + songDuration;
+
+                        pdf.add(new Paragraph(line, fnt10n));
                     }
                 }
-
-                pdf.add(new Paragraph(line, fnt10n));
             }
 
         } catch (IOException | DocumentException | JAXBException e) {
