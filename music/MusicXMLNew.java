@@ -6,10 +6,12 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class MusicXMLNew {
 
@@ -19,7 +21,7 @@ public class MusicXMLNew {
         Document pdf = new Document(PageSize.A4);
         Paragraph parag = new Paragraph();
 
-        String line, codePage = "CP1250";
+        String line = null, codePage = "CP1250", sep = " ";
         Date date;
         Font fnt10n;
         PageEvent pageEvent = new PageEvent();
@@ -33,6 +35,9 @@ public class MusicXMLNew {
             date = new Date();
             Date startDate = new Timestamp(date.getTime());
             System.out.println("Start: " + startDate);
+
+            jaxb = JAXBContext.newInstance(ObjectFactory.class);
+            unmarsh = jaxb.createUnmarshaller();
 
             if (args.length < 3) {
                 System.out.println("Wymaga trzech argumentow:\n args[0] - nazwa zbioru tekstowego,"
@@ -53,6 +58,8 @@ public class MusicXMLNew {
 
             // zbior XML, ktory zostanie przetworzony na PDF:+
             xmlrdr = FileFactory.newBufferedReader(args[0], codePage);
+            music = (Music) unmarsh.unmarshal(xmlrdr);
+            List<Music.Artist> listaArtystow = music.getArtist();
 
             // wyjsciowy PDF:
             if (os.contains("Win"))
@@ -97,19 +104,28 @@ public class MusicXMLNew {
             // czcionka dla akapitu:
             parag.setFont(fnt10n);
 
+            for (Music.Artist artysta : listaArtystow) {
+                List<Music.Artist.Album> listaAlbumow = artysta.getAlbum();
+                for (Music.Artist.Album album : listaAlbumow) {
+                    Music.Artist.Album.Description opis = album.getDescription();
+                    List<Music.Artist.Album.Song> listaPiosenek = album.getSong();
+                    for (Music.Artist.Album.Song piosenka : listaPiosenek) {
+                        // Elementy do wydruku
+                        String artistName = artysta.getName();
+                        String albumName = album.getTitle();
+                        int numberOfSongs = listaPiosenek.size();
+                        String albumDescription = album.getDescription().getValue();
+                        String songTitle = piosenka.getTitle();
+                        String songDuration = piosenka.getLength();
 
-            while (true) {
-                line = xmlrdr.readLine();
-                if (line == null)
-                    break;
-                else {
-                    parag.add(line);
-                    pdf.add(parag);
-                    parag.clear();
+                        line = songTitle + sep + songDuration;
+                    }
                 }
+
+                pdf.add(new Paragraph(line, fnt10n));
             }
-            pdf.add(new Paragraph(line, fnt10n));
-        } catch (IOException | DocumentException e) {
+
+        } catch (IOException | DocumentException | JAXBException e) {
             e.printStackTrace();
         } finally {
             try {
