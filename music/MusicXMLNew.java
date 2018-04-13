@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class MusicXMLNew {
         String line, codePage = "CP1250", sep = " ", intro, albumName, songDuration, songTitle, artistName, albumDescription;
         int numberOfSongs = 0;
         Date date;
-        Font fnt10n;
+        Font fnt10n, fnt14b, fnt16i;
         PageEvent pageEvent = new PageEvent();
 
         JAXBContext jaxb = null;
@@ -73,6 +74,9 @@ public class MusicXMLNew {
             Font font = FontFactory.getFont("pdfFont", BaseFont.CP1250, BaseFont.EMBEDDED);
             BaseFont bf = font.getBaseFont();
             fnt10n = new Font(bf, 10f, Font.NORMAL, BaseColor.BLACK);
+            fnt14b = new Font(bf, 14f, Font.BOLD, BaseColor.RED);
+            fnt16i = new Font(bf, 16f, Font.ITALIC, BaseColor.BLUE);
+
 
             // PDF
             writer.setPdfVersion(PdfWriter.VERSION_1_7);
@@ -95,18 +99,18 @@ public class MusicXMLNew {
             pdf.newPage();
 
             intro = "This is Music Collection";
-            pdf.add(new Paragraph(intro + "\n************************************\n\n", fnt10n));
+            pdf.add(new Paragraph(intro + "\n************************************\n\n", fnt16i));
 
             for (Music.Artist artysta : listaArtystow) {
                 artistName = artysta.getName();
                 line = "Artist: " + artistName;
-                pdf.add(new Paragraph(line, fnt10n));
+                pdf.add(new Paragraph(line, fnt14b));
 
                 List<Music.Artist.Album> listaAlbumow = artysta.getAlbum();
                 for (Music.Artist.Album album : listaAlbumow) {
                     albumName = album.getTitle();
                     line = "Album name: " + albumName + "\n\n";
-                    pdf.add(new Paragraph(line, fnt10n));
+                    pdf.add(new Paragraph(line, fnt14b));
 
                     albumDescription = album.getDescription().getValue();
 
@@ -123,10 +127,11 @@ public class MusicXMLNew {
                         pdf.add(new Paragraph(line, fnt10n));
                     }
 
+
                     line = "\nNumber of songs in the album: " + numberOfSongs + "\n\n";
                     pdf.add(new Paragraph(line, fnt10n));
 
-                    line = "Album description: " + albumDescription;
+                    line = "Album description:" + albumDescription;
                     pdf.add(new Paragraph(line, fnt10n));
                 }
             }
