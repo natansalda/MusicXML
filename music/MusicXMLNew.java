@@ -21,7 +21,8 @@ public class MusicXMLNew {
         Document pdf = new Document(PageSize.A4);
         Paragraph parag = new Paragraph();
 
-        String line = null, codePage = "CP1250", sep = " ", intro = null;
+        String line, codePage = "CP1250", sep = " ", intro, albumName, songDuration, songTitle, artistName, albumDescription;
+        int numberOfSongs = 0;
         Date date;
         Font fnt10n;
         PageEvent pageEvent = new PageEvent();
@@ -93,28 +94,40 @@ public class MusicXMLNew {
             pdf.open();
             pdf.newPage();
 
-            intro = "This is Music Collection \n\n";
-            pdf.add(new Paragraph(intro, fnt10n));
+            intro = "This is Music Collection";
+            pdf.add(new Paragraph(intro + "\n************************************\n\n", fnt10n));
 
             for (Music.Artist artysta : listaArtystow) {
+                artistName = artysta.getName();
+                line = "Artist: " + artistName;
+                pdf.add(new Paragraph(line, fnt10n));
+
                 List<Music.Artist.Album> listaAlbumow = artysta.getAlbum();
                 for (Music.Artist.Album album : listaAlbumow) {
-                    Music.Artist.Album.Description opis = album.getDescription();
+                    albumName = album.getTitle();
+                    line = "Album name: " + albumName + "\n\n";
+                    pdf.add(new Paragraph(line, fnt10n));
+
+                    albumDescription = album.getDescription().getValue();
+
+                    line = "Songs list: " + "\n";
+                    pdf.add(new Paragraph(line, fnt10n));
+
                     List<Music.Artist.Album.Song> listaPiosenek = album.getSong();
                     for (Music.Artist.Album.Song piosenka : listaPiosenek) {
-                        // Elementy do wydruku
-                        String artistName = artysta.getName();
-                        String albumName = album.getTitle();
-                        int numberOfSongs = listaPiosenek.size();
-                        String albumDescription = album.getDescription().getValue();
-                        String songTitle = piosenka.getTitle();
-                        String songDuration = piosenka.getLength();
+                        numberOfSongs = listaPiosenek.size();
+                        songTitle = piosenka.getTitle();
+                        songDuration = piosenka.getLength();
 
-
-                        line = "Artist: " + artistName + ". Album name: " + albumName + sep + "Songs list: " + songTitle + sep + songDuration;
-
+                        line = songTitle + sep + songDuration;
                         pdf.add(new Paragraph(line, fnt10n));
                     }
+
+                    line = "\nNumber of songs in the album: " + numberOfSongs + "\n\n";
+                    pdf.add(new Paragraph(line, fnt10n));
+
+                    line = "Album description: " + albumDescription;
+                    pdf.add(new Paragraph(line, fnt10n));
                 }
             }
 
