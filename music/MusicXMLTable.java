@@ -15,23 +15,28 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-public class MusicXMLNew {
+public class MusicXMLTable {
 
     public static void main(String[] args) {
+
+        final String IMAGE_PATH = "C:\\Users\\natalia.nazaruk\\Pictures\\";
         BufferedReader xmlrdr = null;
         PdfWriter writer;
-        Document pdf = new Document(PageSize.A4.rotate());
+        Document pdf = new Document(PageSize.A4);
         pdf.setMargins(20, 20, 20, 20);
 
-        Table table = new Table(new float[]{4, 1, 3, 4, 3, 3, 3, 3, 1});
-        table.setWidthPercent(100);
-
         String line, codePage = "CP1250", sep = " ", intro, albumName, songDuration, songTitle, artistName, albumDescription;
-        String starSeparator = "\n******************************************************************************************\n\n";
+        String starSeparator = "\n****************************************************************\n\n";
         int numberOfSongs = 0;
         Date date;
         Font fnt10n, fnt14b, fnt16i;
         PageEvent pageEvent = new PageEvent();
+
+        PdfPTable table = null;
+        PdfPCell cell, cellAlbum;
+        float columnWidths[] = {2f, 3f, 1f};
+
+        int rowspan = 2;
 
         JAXBContext jaxb = null;
         Unmarshaller unmarsh = null;
@@ -46,10 +51,11 @@ public class MusicXMLNew {
             jaxb = JAXBContext.newInstance(ObjectFactory.class);
             unmarsh = jaxb.createUnmarshaller();
 
-            if (args.length < 3) {
+            if (args.length < 4) {
                 System.out.println("Wymaga trzech argumentow:\n args[0] - nazwa zbioru tekstowego,"
-                        + "\n args[1] - nazwa wyjsciowego zbioru PDF,\n args[2] - sciezka do pliku czcionki."
-                        + "\n args[3] - strona kodowa pliku wejsciowego (domyslnie: windows-1250");
+                        + "\n args[1] - nazwa wyjsciowego zbioru PDF,\n args[2] - sciezka do pliku czcionki,"
+                        + "\n args[3] - ścieżka do plików img,"
+                        + "\n args[4] - strona kodowa pliku wejsciowego (domyslnie: windows-1250");
                 System.exit(20);
             }
             String os = System.getProperty("os.name");
@@ -58,15 +64,18 @@ public class MusicXMLNew {
             System.out.println("Plik XML: " + args[0]);
             System.out.println("Plik PDF: " + args[1]);
             System.out.println("Plik czcionki: " + args[2]);
+            System.out.println("Sciezka do obrazkow: " + args[3]);
 
-            if (args.length == 4)
-                codePage = args[3];
+            if (args.length == 5)
+                codePage = args[4];
             System.out.println("Strona kodowa zbioru wejsciowego: " + codePage);
 
             // zbior XML, ktory zostanie przetworzony na PDF:+
             xmlrdr = FileFactory.newBufferedReader(args[0], codePage);
             music = (Music) unmarsh.unmarshal(xmlrdr);
+
             List<Music.Artist> listaArtystow = music.getArtist();
+            System.out.println("Liczba artystow: " + listaArtystow.size());
 
             // wyjsciowy PDF:
             if (os.contains("Win"))
@@ -105,10 +114,22 @@ public class MusicXMLNew {
             intro = "This is Music Collection";
             pdf.add(new Paragraph(intro + starSeparator, fnt16i));
 
+
             for (Music.Artist artysta : listaArtystow) {
                 artistName = artysta.getName();
                 line = "Artist: " + artistName;
                 pdf.add(new Paragraph(line, fnt14b));
+
+                table = new PdfPTable(3);
+                table.setWidths(columnWidths);
+                table.setWidthPercentage(100);
+                table.setSpacingBefore(10f);
+
+                // Artist cell
+                cell = new PdfPCell(new Phrase("Artist name: " + artistName));
+                cell.setColspan(3);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(cell);
 
                 List<Music.Artist.Album> listaAlbumow = artysta.getAlbum();
                 for (Music.Artist.Album album : listaAlbumow) {
@@ -122,15 +143,43 @@ public class MusicXMLNew {
                     pdf.add(new Paragraph(line, fnt10n));
 
                     List<Music.Artist.Album.Song> listaPiosenek = album.getSong();
+
+                    // Album cell
+                    Paragraph paragraph = new Paragraph("Album title:" + "\n" + albumName);
+                    cellAlbum = new PdfPCell();
+                    numberOfSongs = listaPiosenek.size();
+                    cellAlbum.setRowspan(numberOfSongs);
+                    cellAlbum.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cellAlbum.addElement(paragraph);
+                    if (albumName.contains("Limb")) {
+                        Image image = Image.getInstance(args[3] + "/rad1.png");
+                        image.scaleAbsolute(100, 100);
+                        cellAlbum.addElement(image);
+                    } else if (albumName.contains("Comp")) {
+                        Image image = Image.getInstance(args[3] + "/rad2.png");
+                        image.scaleAbsolute(100, 100);
+                        cellAlbum.addElement(image);
+                    } else if (albumName.contains("Dummy")) {
+                        Image image = Image.getInstance(args[3] + "/por1.png");
+                        image.scaleAbsolute(100, 100);
+                        cellAlbum.addElement(image);
+                    } else {
+                        Image image = Image.getInstance(args[3] + "/por2.png");
+                        image.scaleAbsolute(100, 100);
+                        cellAlbum.addElement(image);
+                    }
+                    table.addCell(cellAlbum);
+
                     for (Music.Artist.Album.Song piosenka : listaPiosenek) {
-                        numberOfSongs = listaPiosenek.size();
                         songTitle = piosenka.getTitle();
                         songDuration = piosenka.getLength();
 
                         line = songTitle + sep + songDuration;
                         pdf.add(new Paragraph(line, fnt10n));
-                    }
 
+                        table.addCell(songTitle);
+                        table.addCell(songDuration);
+                    }
 
                     line = "\nNumber of songs in the album: " + numberOfSongs + "\n\n";
                     pdf.add(new Paragraph(line, fnt10n));
@@ -138,7 +187,10 @@ public class MusicXMLNew {
                     line = "Album description:" + albumDescription;
                     pdf.add(new Paragraph(line, fnt10n));
                 }
+
+                pdf.add(table);
             }
+
 
         } catch (IOException | DocumentException | JAXBException e) {
             e.printStackTrace();
